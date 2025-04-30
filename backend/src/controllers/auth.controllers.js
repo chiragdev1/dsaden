@@ -123,7 +123,7 @@ export const login = async (req, res) => {
 }
 
 export const logout = async (req, res) => {
-   
+
    try {
       res.clearCookie("jwt", {
       httpOnly: true,
@@ -145,4 +145,15 @@ export const logout = async (req, res) => {
    }
 }
 
-export const check = async (req, res) => {}
+export const check = async (req, res) => {
+   try {
+      res.status(200).json({
+         success: true,
+         message: 'User authenticated successfully',
+         user: req.user
+      })
+   } catch (error) {
+      console.log('User authentication failed', error)
+      res.status(404).json({message: "User check failed"})
+   }
+}
