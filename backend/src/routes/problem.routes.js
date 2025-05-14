@@ -1,12 +1,13 @@
 import express from 'express'
-import { authenticateUser, checkAdmin } from '../middlewares/auth.middlewares'
+import { authenticateUser, checkAdmin } from '../middlewares/auth.middlewares.js'
 import {
    createProblem,
    getAllProblems,
    getProblemById,
    updateProblem,
-   deleteProblem
-} from "../controllers/problem.controllers";
+   deleteProblem,
+   getAllProblemsSolvedByUser
+} from "../controllers/problem.controllers.js";
 
 
 const problemRoutes = express.Router()

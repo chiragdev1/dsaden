@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import { check, login, logout, register } from '../controllers/auth.controllers.js'
-import { authMiddleware } from '../middlewares/auth.middlewares.js'
+import { authenticateUser } from '../middlewares/auth.middlewares.js'
 
 const authRoutes = Router()
 
@@ -10,9 +10,9 @@ authRoutes.post('/register', register)
 
 authRoutes.post('/login', login)
 
-authRoutes.post('/logout', authMiddleware, logout)
+authRoutes.post('/logout', authenticateUser, logout)
 
-authRoutes.get('/check', authMiddleware, check) 
+authRoutes.get('/check', authenticateUser, check) 
 
 
 export default authRoutes
