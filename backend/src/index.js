@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/v1/auth', authRoutes)
 
-app.use('api/v1/problems', problemRoutes)
+app.use('/api/v1/problems', problemRoutes)
 
 app.listen(3000, () => {
    console.log(`Server is running on port ${port}`)
