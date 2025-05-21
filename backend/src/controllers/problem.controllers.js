@@ -1,3 +1,5 @@
+import { db } from "../libs/db.js";
+import { getJudge0LanguageId, pollBatchResults, submitBatch } from "../libs/judge0.lib.js";
 
 export const createProblem = async (req, res) => {
    // Get all the required fields from the request body 
@@ -12,6 +14,9 @@ export const createProblem = async (req, res) => {
       referenceSolutions,
       codeSnippets,
    } = req.body;
+
+   console.log('Retrived data from req.body')
+
    // check user role again
    if(req.user.role !== 'ADMIN'){
       return res.status(403).json({ error: 'You are not allowed to create problem' });
@@ -19,7 +24,7 @@ export const createProblem = async (req, res) => {
    // Loop through each reference solution
    try {
       for(const [language, solutionCode] of Object.entries(referenceSolutions)) {
-         const languageId = getJudge0LanguageId(language)
+         const languageId = getJudge0LanguageId(language);
 
          if(!languageId) {
             return res.status(400).json({error: `Language ${language} is not supported!`})
@@ -47,27 +52,39 @@ export const createProblem = async (req, res) => {
                return res.status(400).json({error: `Testcase ${i + 1} failed for language ${language}`})
             }
          }
-
-         const newProblem = await decodeBase64.problem.create({
-            data: {
-               title,
-               description,
-               difficulty,
-               tags,
-               examples,
-               constraints,
-               testcases,
-               referenceSolutions,
-               codeSnippets,
-               userId: req.user.id,
-            },
-         })
-
-         return res.status(201).json(newProblem)
-
       }
-   } catch (error) {
+
+      console.log('Creating new problem in db')
+      const newProblem = await db.problem.create({
+         data: {
+            title,
+            description,
+            difficulty,
+            tags,
+            examples,
+            constraints,
+            testcases,
+            referenceSolutions,
+            codeSnippets,
+            userId: req.user.id,
+         },
+      })
+      console.log("new problem created successfully: ", newProblem)
+
       
+      return res.status(201).json({
+         success: true,
+         message: 'Problem created successfully',
+         problem: newProblem,
+      })
+
+   } catch (error) {
+      console.log('Error looping through reference solutions, Error: ',error )
+
+      res.send(401).json({
+         success: false,
+         message: "Error looping through reference solutions",
+      });
    }
 }
 
@@ -80,3 +97,5 @@ export const updateProblem = async (req, res) => {}
 export const deleteProblem = async (req, res) => {
    
 }
+
+export const getAllProblemsSolvedByUser = async (req, res) => {}

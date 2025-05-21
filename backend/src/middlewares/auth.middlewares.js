@@ -47,6 +47,7 @@ export const authenticateUser = async (req, res, next) => {
       }
 
       req.user = user
+      console.log('User authenticated successfully')
       next()
 
    } catch (error) {
@@ -58,24 +59,30 @@ export const authenticateUser = async (req, res, next) => {
    }
 }
 
-export const checkAdmin = (req, res, next) => {
+export const checkAdmin = async (req, res, next) => {
    try {
       const userId = req.user.id
-      const userRole = db.user.findUnique({
+      
+      const user = await db.user.findUnique({
          where: {
             id: userId
          },
          select: {
-            role:true
+            role: true
          }
       })
 
-      if(!user || userRole !== 'ADMIN') {
+      // console.log('User from db', user)
+      if(!user || user.role !== 'ADMIN') {
+         if(!user)console.log('User not found')
+         if(userRole.role !== 'ADMIN') console.log('User is not an admin', userRole)
+
          return res.status(403).json({
             success: false,
             message: 'Access denied - Admins only'
          })
       }
+      console.log('Admin check successful!')
       next()
 
    } catch (error) {
