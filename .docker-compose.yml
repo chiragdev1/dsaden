@@ -1,0 +1,21 @@
+services:
+  server:
+    build: ./server
+    container_name: dsaden-server
+    ports:
+      -"4000:4000"
+    networks:
+      - dsaden-net
+    restart: unless-stopped
+  client:
+    build: ./client
+    container_name: dsaden-client
+    ports:
+      -"5174:3000"
+    networks:
+      - dsaden-net
+    restart: unless-stopped
+
+networks:
+  dsaden-net:
+    driver: bridge
