@@ -1,0 +1,7 @@
+{
+   "source_code": "const fs = require('fs');\n\n// Reading input from stdin (using fs to read all input) \nconst input = fs.readFileSync(0, 'utf-8').trim();\nconst [a, b] = input.split('').map(Number);\n\nconsole.log(a + b);",
+   "language_id":63,
+   "stdin":["100 200", "-500-600", "00"],
+   "expected_outputs": ["300","-1100", "0"],
+   "problemId":"bce8d8dd-a54a-4fa7-a55e-2115c53d1d38"
+}
